@@ -1,6 +1,4 @@
-using System;
-
-namespace MyLibrary.Models {
+namespace MyLibrary.Models.ViewModels {
     public class ErrorViewModel {
         public string RequestId { get; set; }
 

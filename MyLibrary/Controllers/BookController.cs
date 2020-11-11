@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MyLibrary.Data;
 using MyLibrary.Models;
+using MyLibrary.Models.ViewModels;
 
 namespace MyLibrary.Controllers
 {
@@ -25,7 +26,7 @@ namespace MyLibrary.Controllers
                 join ab in _context.BookAuthors on b.BookId equals ab.BookId
                 select new BookAuthorViewModel() {
                     BookType = b.BookType, Name = b.Name, ISBN = b.ISBN, Cost = b.Cost, Language = b.Language,
-                    Publisher = b.Publisher, Author = ab.Author.LastName, BookId = b.BookId
+                    Publisher = b.Publisher, Author = ab.Author.LastName, BookId = b.BookId, Image = b.Image, Rating = b.Ration
                 };
             return View(await content.ToListAsync());
         }

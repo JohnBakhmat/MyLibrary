@@ -28,5 +28,6 @@ namespace MyLibrary.Models {
         
         public ICollection<BookCategory> Categories { get; set; } = new List<BookCategory>();
         
+        public string Image { get; set; }
     }
 }
