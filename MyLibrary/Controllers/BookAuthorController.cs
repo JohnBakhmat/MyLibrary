@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Server.IISIntegration;
 using Microsoft.EntityFrameworkCore;
 using MyLibrary.Data;
 using MyLibrary.Models;
@@ -47,8 +48,10 @@ namespace MyLibrary.Controllers
         }
 
         // GET: BookAuthor/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewData["Authors"] = await _context.Authors.ToListAsync();
+            ViewData["Books"] = await _context.Books.ToListAsync();
             ViewData["AuthorId"] = new SelectList(_context.Authors, "AuthorId", "AuthorId");
             ViewData["BookId"] = new SelectList(_context.Books, "BookId", "BookId");
             return View();
@@ -59,8 +62,10 @@ namespace MyLibrary.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookAuthorId,BookId,AuthorId")] BookAuthor bookAuthor)
-        {
+        public async Task<IActionResult> Create([Bind("BookAuthorId,BookId,AuthorId")] BookAuthor bookAuthor) {
+            var a = await _context.BookAuthors.ToListAsync();
+            var id =1+a.OrderByDescending(i => i.BookAuthorId).First().BookAuthorId;
+            bookAuthor.BookAuthorId = id;
             if (ModelState.IsValid)
             {
                 var book = await _context.Books.FindAsync(bookAuthor.BookId);
@@ -77,6 +82,9 @@ namespace MyLibrary.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            
+            ViewData["Authors"] = await _context.Authors.ToListAsync();
+            ViewData["Books"] = await _context.Books.ToListAsync();
             ViewData["AuthorId"] = new SelectList(_context.Authors, "AuthorId", "AuthorId", bookAuthor.AuthorId);
             ViewData["BookId"] = new SelectList(_context.Books, "BookId", "BookId", bookAuthor.BookId);
             return View(bookAuthor);
@@ -90,13 +98,14 @@ namespace MyLibrary.Controllers
                 return NotFound();
             }
 
-            var bookAuthor = await _context.BookAuthors.FindAsync(id);
+            var bookAuthor = await _context.BookAuthors.FirstOrDefaultAsync(b => b.BookAuthorId.Equals(id));
             if (bookAuthor == null)
             {
                 return NotFound();
             }
             ViewData["AuthorId"] = new SelectList(_context.Authors, "AuthorId", "AuthorId", bookAuthor.AuthorId);
             ViewData["BookId"] = new SelectList(_context.Books, "BookId", "BookId", bookAuthor.BookId);
+            ViewData["Authors"] = await _context.Authors.ToListAsync();
             return View(bookAuthor);
         }
 
@@ -107,33 +116,24 @@ namespace MyLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("BookAuthorId,BookId,AuthorId")] BookAuthor bookAuthor)
         {
-            if (id != bookAuthor.AuthorId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(bookAuthor);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!BookAuthorExists(bookAuthor.AuthorId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+            if (ModelState.IsValid) {
+                var ba =  await _context.BookAuthors.FirstAsync(item => item.BookAuthorId == bookAuthor.BookAuthorId);
+                var book = await _context.Books.FindAsync(bookAuthor.BookId);
+                var author = await _context.Authors.FindAsync(bookAuthor.AuthorId);
+                book.Authors.Remove(ba);
+                author.Books.Remove(ba);
+                _context.BookAuthors.Remove(ba);
+                author.Books.Add(bookAuthor);
+                book.Authors.Add(bookAuthor);
+                _context.BookAuthors.Add(bookAuthor);
+                _context.Update(author);
+                _context.Update(book);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AuthorId"] = new SelectList(_context.Authors, "AuthorId", "AuthorId", bookAuthor.AuthorId);
             ViewData["BookId"] = new SelectList(_context.Books, "BookId", "BookId", bookAuthor.BookId);
+            ViewData["Authors"] = await _context.Authors.ToListAsync();
             return View(bookAuthor);
         }
 
@@ -148,7 +148,7 @@ namespace MyLibrary.Controllers
             var bookAuthor = await _context.BookAuthors
                 .Include(b => b.Author)
                 .Include(b => b.Book)
-                .FirstOrDefaultAsync(m => m.AuthorId == id);
+                .FirstOrDefaultAsync(m => m.BookAuthorId == id);
             if (bookAuthor == null)
             {
                 return NotFound();
@@ -162,8 +162,14 @@ namespace MyLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var bookAuthor = await _context.BookAuthors.FindAsync(id);
-            _context.BookAuthors.Remove(bookAuthor);
+            var ba =  await _context.BookAuthors.FirstAsync(item => item.BookAuthorId == id);
+            var book = await _context.Books.FindAsync(ba.BookId);
+            var author = await _context.Authors.FindAsync(ba.AuthorId);
+            book.Authors.Remove(ba);
+            author.Books.Remove(ba);
+            _context.BookAuthors.Remove(ba);
+            _context.Update(author);
+            _context.Update(book);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

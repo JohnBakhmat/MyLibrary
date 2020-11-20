@@ -8,6 +8,8 @@ namespace MyLibrary.Models {
         [Key]
         public int BookId { get; set; }
         
+        public int BookNumber { get; set; }
+        
         public string Name { get; set; }
         
         public string ISBN { get; set; }

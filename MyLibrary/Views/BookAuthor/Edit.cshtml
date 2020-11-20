@@ -1,9 +1,10 @@
-@model MyLibrary.Models.BookAuthor
-
+@model BookAuthor
 @{
     Layout = "_Layout";
 }
-
+@{
+    var authors = ViewData["Authors"] as List<Author>;
+}
 <!DOCTYPE html>
 
 <html>
@@ -17,15 +18,15 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" method="POST">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="BookAuthorId" class="control-label"></label>
-                <input asp-for="BookAuthorId" class="form-control" />
-                <span asp-validation-for="BookAuthorId" class="text-danger"></span>
-            </div>
+            <select asp-for="AuthorId" class="form-control">
+                 @foreach (var author in authors) {
+                     <option label="@author.FirstName @author.LastName" value="@author.AuthorId"></option>
+                 }
+             </select>
             <input type="hidden" asp-for="BookId" />
-            <input type="hidden" asp-for="AuthorId" />
+            <input type="hidden" asp-for="BookAuthorId" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

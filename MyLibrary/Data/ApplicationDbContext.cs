@@ -44,6 +44,7 @@ namespace MyLibrary.Data {
                 .WithMany(s => s.BookLog)
                 .HasForeignKey(sc => sc.UserId);
             
+            // Authors
             builder.Entity<BookAuthor>()
                 .HasOne(sc => sc.Book)
                 .WithMany(s => s.Authors)

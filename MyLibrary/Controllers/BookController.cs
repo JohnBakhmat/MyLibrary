@@ -21,13 +21,21 @@ namespace MyLibrary.Controllers
         }
 
         // GET: Book
-        public async Task<IActionResult> Index() {
-            var content = from b in _context.Books
-                join ab in _context.BookAuthors on b.BookId equals ab.BookId
+        public async Task<IActionResult> Index(string searchString="", string author = "") {
+            var content = 
+                from b in _context.Books
+                join ab in _context.BookAuthors 
+                    on b.BookId equals ab.BookId into gj
+                from ab in gj.DefaultIfEmpty()
                 select new BookAuthorViewModel() {
                     BookType = b.BookType, Name = b.Name, ISBN = b.ISBN, Cost = b.Cost, Language = b.Language,
-                    Publisher = b.Publisher, Author = ab.Author.LastName, BookId = b.BookId, Image = b.Image, Rating = b.Ration
+                    Publisher = b.Publisher, Author = ab.Author.FirstName + " " + ab.Author.LastName, BookId = b.BookId, Image = b.Image, Rating = b.Ration
                 };
+            if (!String.IsNullOrEmpty(searchString)) {
+                var sS = searchString.Split(' ');
+                content = sS.Aggregate(content, (current, parameter) => current.Where(b => b.Author.Contains(parameter) || b.Name.Contains(parameter) || b.ISBN.Contains(parameter) || b.Publisher.Contains(parameter) || b.Language.Contains(parameter)));
+            }
+
             return View(await content.ToListAsync());
         }
 
