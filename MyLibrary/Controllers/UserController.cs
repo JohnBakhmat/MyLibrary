@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -148,6 +149,20 @@ namespace MyLibrary.Controllers
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.UserId == id);
+        }
+        public async Task<FileContentResult> Inventory () {
+            var content = await _context.Users.ToListAsync();
+            try {
+                var buffer = "FirstName,FathersName,LastName,Age,Class,Rating";
+                foreach (var user in content) {
+                    buffer += $"\n{user.FirstName},{user.FathersName},{user.LastName},{user.Age},{user.Class},{user.Rating}";
+                }
+                return File(Encoding.UTF8.GetBytes(buffer), "text/csv", "users.csv");
+            }
+            catch {
+                return null;
+            }
+
         }
     }
 }

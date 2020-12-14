@@ -7,9 +7,7 @@ namespace MyLibrary.Models {
     public class Book {
         [Key]
         public int BookId { get; set; }
-        
-        public int BookNumber { get; set; }
-        
+
         public string Name { get; set; }
         
         public string ISBN { get; set; }
@@ -24,9 +22,11 @@ namespace MyLibrary.Models {
 
         public int Cost { get; set; } = 0;
         
+        public int Count { get; set; }
+        
         public ICollection<BookAuthor> Authors { get; set; } = new List<BookAuthor>();
         
-        public ICollection<BookUser> UserLog { get; set; } = new List<BookUser>();
+        public ICollection<BookObject> BookObjects { get; set; } = new List<BookObject>();
         
         public ICollection<BookCategory> Categories { get; set; } = new List<BookCategory>();
         

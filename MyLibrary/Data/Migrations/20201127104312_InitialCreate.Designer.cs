@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyLibrary.Data;
 
-namespace MyLibrary.Data.Migrations
+namespace MyLibrary.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201120152832_bookNumberFiix")]
-    partial class bookNumberFiix
+    [Migration("20201127104312_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -243,13 +243,13 @@ namespace MyLibrary.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BookNumber")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("BookType")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Cost")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Count")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("ISBN")
@@ -270,12 +270,7 @@ namespace MyLibrary.Data.Migrations
                     b.Property<int>("Ration")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ShelfId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("BookId");
-
-                    b.HasIndex("ShelfId");
 
                     b.ToTable("Books");
                 });
@@ -314,6 +309,30 @@ namespace MyLibrary.Data.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("BookCategories");
+                });
+
+            modelBuilder.Entity("MyLibrary.Models.BookObject", b =>
+                {
+                    b.Property<int>("BookObjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BookCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("BookInfoBookId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ShelfId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("BookObjectId");
+
+                    b.HasIndex("BookInfoBookId");
+
+                    b.HasIndex("ShelfId");
+
+                    b.ToTable("BookObjects");
                 });
 
             modelBuilder.Entity("MyLibrary.Models.BookUser", b =>
@@ -451,13 +470,6 @@ namespace MyLibrary.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MyLibrary.Models.Book", b =>
-                {
-                    b.HasOne("MyLibrary.Models.Shelf", null)
-                        .WithMany("Books")
-                        .HasForeignKey("ShelfId");
-                });
-
             modelBuilder.Entity("MyLibrary.Models.BookAuthor", b =>
                 {
                     b.HasOne("MyLibrary.Models.Author", "Author")
@@ -488,9 +500,20 @@ namespace MyLibrary.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MyLibrary.Models.BookObject", b =>
+                {
+                    b.HasOne("MyLibrary.Models.Book", "BookInfo")
+                        .WithMany("BookObjects")
+                        .HasForeignKey("BookInfoBookId");
+
+                    b.HasOne("MyLibrary.Models.Shelf", "Shelf")
+                        .WithMany("Books")
+                        .HasForeignKey("ShelfId");
+                });
+
             modelBuilder.Entity("MyLibrary.Models.BookUser", b =>
                 {
-                    b.HasOne("MyLibrary.Models.Book", "Book")
+                    b.HasOne("MyLibrary.Models.BookObject", "Book")
                         .WithMany("UserLog")
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)

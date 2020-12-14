@@ -1,4 +1,4 @@
-@model MyLibrary.Models.Book
+@model MyLibrary.Models.ViewModels.BookAuthorViewModel
 
 @{
     Layout = "_Layout";
@@ -8,62 +8,72 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Details</title>
+    <meta name="viewport" content="width=device-width"/>
+    <title>Детали</title>
 </head>
 <body>
 
 <div>
-    <h4>Book</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ISBN)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ISBN)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Publisher)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Publisher)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BookType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BookType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Language)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Language)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cost)
-        </dd>
-    </dl>
+    <div class="row col-12">
+        <img class="img-fluid shadow-lg" width="300px" height="400px" src="@Model.Image" alt="Ошибка: Изображение не найдено!"/>
+        <dl class="col-sm-8">
+            <dt class="col-sm-2">
+                Название:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Автор:
+            </dt>
+            <dd class="col-sm-10">
+                @* @Html.DisplayFor(model => model.Author) *@
+            </dd>
+            <dt class="col-sm-2">
+                ISBN-10:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ISBN)
+            </dd>
+            <dt class="col-sm-2">
+                Издатель:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Publisher)
+            </dd>
+            <dt class="col-sm-2">
+                Тип:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.BookType)
+            </dd>
+            <dt class="col-sm-2">
+                Язык:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Language)
+            </dd>
+            <dt class="col-sm-2">
+                Популярность:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Rating)
+            </dd>
+            <dt class="col-sm-2">
+                Цена:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Cost) &#8372;
+            </dd>
+        </dl>
+    </div>
 </div>
+<br>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.BookId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="BookObject" asp-action="Index" asp-route-id="@Model.BookId" class="btn btn-primary">Выбрать</a> 
+    <a asp-action="Edit" asp-route-id="@Model.BookId" class="btn btn-primary">Редактировать</a> 
+    <a asp-action="Delete" asp-route-id="@Model.BookId" class="btn btn-danger">Удалить</a> 
+    <a asp-action="Index" class="btn btn-success">Вернуться</a>
 </div>
 </body>
 </html>

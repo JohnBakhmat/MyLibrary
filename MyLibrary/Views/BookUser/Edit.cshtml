@@ -1,0 +1,54 @@
+@using Microsoft.AspNetCore.Routing
+@using Microsoft.CodeAnalysis
+@model BookUser
+@{
+    Layout = "_Layout";
+}
+@{
+    var users = ViewData["Users"] as List<User>;
+    var books = ViewData["Books"] as List<BookObject>;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<h4>BookAuthor</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="POST" asp>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <select asp-for="UserId" class="form-control" id="select">
+                @foreach (var user in users) {
+                    <option label="@user.FirstName @user.LastName" value="@user.UserId"></option>
+                }
+            </select>
+            <select asp-for="BookId" class="form-control" id="select">
+                            @foreach (var book in books) {
+                                <option label="@book.BookCode" value="@book.BookObjectId"></option>
+                            }
+                        </select>
+            <input type="hidden" asp-for="Id"/>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+</body>
+</html>
+<script>
+function n(){
+
+}
+</script>

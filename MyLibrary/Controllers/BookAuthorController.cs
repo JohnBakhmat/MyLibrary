@@ -64,8 +64,10 @@ namespace MyLibrary.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BookAuthorId,BookId,AuthorId")] BookAuthor bookAuthor) {
             var a = await _context.BookAuthors.ToListAsync();
-            var id =1+a.OrderByDescending(i => i.BookAuthorId).First().BookAuthorId;
-            bookAuthor.BookAuthorId = id;
+            var id = a.Any()? 1 + a.OrderByDescending(i => i.BookAuthorId).First().BookAuthorId : 1;
+                bookAuthor.BookAuthorId = id;
+            
+
             if (ModelState.IsValid)
             {
                 var book = await _context.Books.FindAsync(bookAuthor.BookId);

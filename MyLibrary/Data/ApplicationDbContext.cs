@@ -14,6 +14,7 @@ namespace MyLibrary.Data {
         public DbSet<User> Users { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Author> Authors { get; set; }
+        public DbSet<BookObject> BookObjects { get; set; }
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<BookAuthor> BookAuthors { get; set; }
         public DbSet<BookUser> BookUsers { get; set; }
@@ -43,6 +44,10 @@ namespace MyLibrary.Data {
                 .HasOne(sc => sc.User)
                 .WithMany(s => s.BookLog)
                 .HasForeignKey(sc => sc.UserId);
+
+            builder.Entity<BookObject>()
+                .HasOne(bo => bo.BookInfo)
+                .WithMany(b => b.BookObjects);
             
             // Authors
             builder.Entity<BookAuthor>()

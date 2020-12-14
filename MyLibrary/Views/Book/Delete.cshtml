@@ -1,4 +1,4 @@
-@model MyLibrary.Models.Book
+@model MyLibrary.Models.ViewModels.BookAuthorViewModel
 
 @{
     Layout = "_Layout";
@@ -13,59 +13,68 @@
 </head>
 <body>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3 class="text-danger">Вы уверены что хотите удалить это издание?</h3>
 <div>
-    <h4>Book</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ISBN)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ISBN)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Publisher)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Publisher)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BookType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BookType)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Language)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Language)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Cost)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Cost)
-        </dd>
-    </dl>
-    
+    <div>
+        <div class="row col-12">
+            <img class="img-fluid shadow-lg" width="300px" height="400px" src="@Model.Image" alt="Ошибка: Изображение не найдено!"/>
+            <dl class="col-sm-8">
+                <dt class="col-sm-2">
+                    Название:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+                <dt class="col-sm-2">
+                    Автор:
+                </dt>
+                <dd class="col-sm-10">
+                    @* @Html.DisplayFor(model => model.Author) *@
+                </dd>
+                <dt class="col-sm-2">
+                    ISBN-10:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ISBN)
+                </dd>
+                <dt class="col-sm-2">
+                    Издатель:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Publisher)
+                </dd>
+                <dt class="col-sm-2">
+                    Тип:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.BookType)
+                </dd>
+                <dt class="col-sm-2">
+                    Язык:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Language)
+                </dd>
+                <dt class="col-sm-2">
+                    Популярность:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Rating)
+                </dd>
+                <dt class="col-sm-2">
+                    Цена:
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Cost) &#8372;
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <br>
     <form asp-action="Delete">
         <input type="hidden" asp-for="BookId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Удалить" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-primary">Вернуться</a>
     </form>
 </div>
 </body>

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace MyLibrary.Models.ViewModels {
     public class BookAuthorViewModel {
         public int BookId { get; set; }
@@ -13,8 +15,8 @@ namespace MyLibrary.Models.ViewModels {
         public string Language { get; set; }
 
         public int Cost { get; set; } = 0;
-        
-        public string Author { get; set; }
+
+        public string Author { get; set; } = "";
         
         public string Image { get; set; }
         

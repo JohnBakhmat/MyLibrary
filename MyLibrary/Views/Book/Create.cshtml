@@ -17,10 +17,10 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="form1">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Название</label>
                 <input asp-for="Name" class="form-control" type="text" autocapitalize="sentences"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
@@ -30,37 +30,40 @@
                 <span asp-validation-for="ISBN" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Publisher" class="control-label"></label>
+                <label asp-for="Publisher" class="control-label">Издатель</label>
                 <input asp-for="Publisher" class="form-control" type="text" />
                 <span asp-validation-for="Publisher" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="BookType" class="control-label"></label>
-                <select asp-for="BookType" class="form-control">
-                    <option>@BookType.Book</option>
-                    <option>@BookType.Journal</option>
+                <label asp-for="BookType" class="control-label">Тип издания</label>
+                <select asp-for="BookType" class="form-control" asp-items="Html.GetEnumSelectList<BookType>()">
                 </select>
                 <span asp-validation-for="BookType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Language" class="control-label"></label>
-                <input asp-for="Language" class="form-control" />
+                <label asp-for="Language" class="control-label">Язык</label>
+                <input asp-for="Language" class="form-control"/>
                 <span asp-validation-for="Language" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Ration" class="control-label"></label>
-                <input asp-for="Ration" class="form-control" />
+                <label asp-for="Ration" class="control-label" hidden>Рейтинг</label>
+                <input asp-for="Ration" class="form-control" value="0" hidden/>
                 <span asp-validation-for="Ration" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Cost" class="control-label"></label>
+                <label asp-for="Cost" class="control-label">Цена</label>
                 <input asp-for="Cost" class="form-control" />
                 <span asp-validation-for="Cost" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" type="url" class="form-control" />
+                <label asp-for="Image" class="control-label">Изображение</label>
+                <input asp-for="Image" type="url" class="form-control" required/>
                 <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Count" class="control-label">Колличество</label>
+                <input asp-for="Count" type="number" class="form-control" required value="1"/>
+                <span asp-validation-for="Count" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -72,6 +75,5 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
-
 </body>
 </html>

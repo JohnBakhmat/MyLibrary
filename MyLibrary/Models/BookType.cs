@@ -1,6 +1,8 @@
 namespace MyLibrary.Models {
     public enum BookType {
-        Book,
+        HardCover,
+        Paperback,
+        AudioBook,
         Journal
     }
 }

@@ -1,3 +1,5 @@
+@using Microsoft.AspNetCore.Routing
+@using Microsoft.CodeAnalysis
 @model BookAuthor
 @{
     Layout = "_Layout";
@@ -18,15 +20,15 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" method="POST">
+        <form asp-action="Edit" asp-route-id="@Html." method="POST" asp>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <select asp-for="AuthorId" class="form-control">
-                 @foreach (var author in authors) {
-                     <option label="@author.FirstName @author.LastName" value="@author.AuthorId"></option>
-                 }
-             </select>
+            <select asp-for="AuthorId" class="form-control" id="select">
+                @foreach (var author in authors) {
+                    <option label="@author.FirstName @author.LastName" value="@author.AuthorId"></option>
+                }
+            </select>
             <input type="hidden" asp-for="BookId" />
-            <input type="hidden" asp-for="BookAuthorId" />
+            <input type="hidden" asp-for="BookAuthorId"/>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -40,3 +42,8 @@
 
 </body>
 </html>
+<script>
+function n(){
+
+}
+</script>

@@ -1,15 +1,14 @@
 @using Microsoft.AspNetCore.Identity
-@model IEnumerable<MyLibrary.Models.ViewModels.BookAuthorViewModel>
+@model IEnumerable<MyLibrary.Models.ViewModels.BookObjectViewModel>
 @{
     ViewData["Title"] = "Home Page";
     Layout = "_Layout";
 }
-@if (User.Identity.IsAuthenticated) {
+@*@if (User.Identity.IsAuthenticated) {
     <p>
         <a asp-action="Create" class="btn btn-success">Добавить издание</a>
     </p>
 }
-
 @using (Html.BeginForm())
 {
     <p class="container row">
@@ -20,32 +19,18 @@
                 <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
             </svg></button>
     </p>
-}
-<a asp-action="Inventory" class="btn btn-info col-12">Инвентаризация</a><br>
+}*@
 <table class="table col-auto">
     <thead>
     <tr>
         <th>
-            Картинка
+            Название
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortBy="name">Название</a>
+            Код книги
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortBy="author">Автор</a>
-        </th>
-        <th>
-            <a asp-action="Index" asp-route-sortBy="isbn">ISBN-10</a>
-        </th>
-        <th>
-            <a asp-action="Index" asp-route-sortBy="publisher">Издательство</a>
-        </th>
-        <th>
-            <a asp-action="Index" asp-route-sortBy="type">Тип</a>
-        </th>
-        <th>
-            <a asp-action="Index" asp-route-sortBy="lang">Язык</a>
-            
+            Последний пользователь
         </th>
         <th></th>
 
@@ -54,37 +39,20 @@
     <tbody>
     @foreach (var item in Model) {
         <tr>
-        
-            <td>
-                <img src="@item.Image" alt="Ошибка: Изображение не найдено!" class="img-fluid card-img shadow-lg" style="width: 150px;">
-            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Author);
+                @Html.DisplayFor(modelItem => item.BookNumber)
             </td>
             <td>
-                <p style="word-wrap: break-word;width: 130px">
-                    @Html.DisplayFor(modelItem => item.ISBN)
-                </p>
+                <a asp-controller="User" asp-action="Details" asp-route-id="@item.LastUsersId"></a>
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Publisher)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BookType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Language)
-            </td>
-        
-
-            <td>
+            @*<td>
                 <a asp-action="Details" asp-route-id="@item.BookId" class="btn btn-info col-12">Выбрать</a><br>
                 <a asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-primary col-12">Изменить</a><br>
                 <a asp-action="Delete" asp-route-id="@item.BookId" class="btn btn-danger col-12">Удалить</a>
-            </td>
+            </td>*@
         </tr>
     }
     </tbody>
