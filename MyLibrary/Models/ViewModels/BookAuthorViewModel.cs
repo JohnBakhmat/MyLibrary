@@ -14,7 +14,7 @@ namespace MyLibrary.Models.ViewModels {
 
         public string Language { get; set; }
 
-        public int Cost { get; set; } = 0;
+        public double Cost { get; set; } = 0;
 
         public string Author { get; set; }
         

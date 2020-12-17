@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyLibrary.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class CostFix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -74,7 +74,7 @@ namespace MyLibrary.Migrations
                     BookType = table.Column<int>(nullable: false),
                     Language = table.Column<string>(nullable: true),
                     Ration = table.Column<int>(nullable: false),
-                    Cost = table.Column<int>(nullable: false),
+                    Cost = table.Column<double>(nullable: false),
                     Count = table.Column<int>(nullable: false),
                     Image = table.Column<string>(nullable: true)
                 },
@@ -96,20 +96,6 @@ namespace MyLibrary.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.CategoryId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Shelves",
-                columns: table => new
-                {
-                    ShelfId = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    BookcaseDescription = table.Column<string>(nullable: true),
-                    ShelfCode = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Shelves", x => x.ShelfId);
                 });
 
             migrationBuilder.CreateTable(
@@ -287,6 +273,28 @@ namespace MyLibrary.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Shelves",
+                columns: table => new
+                {
+                    ShelfId = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    BookcaseDescription = table.Column<string>(nullable: true),
+                    ShelfCode = table.Column<string>(nullable: true),
+                    BooksCount = table.Column<int>(nullable: false),
+                    CategoryId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shelves", x => x.ShelfId);
+                    table.ForeignKey(
+                        name: "FK_Shelves_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BookObjects",
                 columns: table => new
                 {
@@ -399,6 +407,11 @@ namespace MyLibrary.Migrations
                 name: "IX_BookUsers_BookId",
                 table: "BookUsers",
                 column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Shelves_CategoryId",
+                table: "Shelves",
+                column: "CategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -437,9 +450,6 @@ namespace MyLibrary.Migrations
                 name: "Authors");
 
             migrationBuilder.DropTable(
-                name: "Categories");
-
-            migrationBuilder.DropTable(
                 name: "BookObjects");
 
             migrationBuilder.DropTable(
@@ -450,6 +460,9 @@ namespace MyLibrary.Migrations
 
             migrationBuilder.DropTable(
                 name: "Shelves");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

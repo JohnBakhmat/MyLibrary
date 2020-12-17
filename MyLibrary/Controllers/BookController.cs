@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,11 +16,12 @@ namespace MyLibrary.Controllers {
         public BookController(ApplicationDbContext context) {
             _context = context;
         }
-
+        
         // GET: Book
         public IActionResult Index(string searchString = "", string sortBy = "name") {
             var content = _context.Books
-                .GroupJoin(_context.BookAuthors, b => b.BookId, ab => ab.BookId, (b, gj) => new {b, gj}).SelectMany(
+                .GroupJoin(_context.BookAuthors, b => b.BookId, ab => ab.BookId, 
+                    (b, gj) => new {b, gj}).SelectMany(
                     t => t.gj.DefaultIfEmpty(),
                     (t, ab) => new BookAuthorViewModel {
                         BookType = t.b.BookType,
@@ -28,7 +30,7 @@ namespace MyLibrary.Controllers {
                         Cost = t.b.Cost,
                         Language = t.b.Language,
                         Publisher = t.b.Publisher,
-                        Author = $"{ab.Author.LastName} {ab.Author.FirstName.First()};",
+                        Author = ab.Author!=null? $"{ab.Author.LastName} {ab.Author.FirstName.First()};":" ",
                         BookId = t.b.BookId,
                         Image = t.b.Image,
                         Rating = t.b.Ration
@@ -137,7 +139,10 @@ namespace MyLibrary.Controllers {
             if (!ModelState.IsValid) return View(book);
             for (var i = 0; i < book.Count; i++) {
                 var bo = new BookObject();
-                var code = 1 + int.Parse(_context.BookObjects.Max(b => b.BookCode)) + i;
+                var code = 1;
+                if (_context.BookObjects.Max(b => b.BookCode) != null) {
+                    code = 1 + int.Parse(_context.BookObjects.Max(b => b.BookCode)) + i;
+                }
                 bo.BookInfo = book;
                 bo.BookCode = code.ToString();
                 _context.Add(bo);
@@ -274,14 +279,5 @@ namespace MyLibrary.Controllers {
             }
         }
 
-        // public IActionResult BookSet() {
-        //     return View();
-        // }
-        //
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public IActionResult BookSet() {
-        //     
-        // }
     }
 }

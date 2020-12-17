@@ -10,7 +10,13 @@ namespace MyLibrary.Models {
         public string BookcaseDescription { get; set; }
         
         public string ShelfCode { get; set; }
+
+        public int BooksCount { get; set; } = 0;
         
+        public int CategoryId { get; set; }
+        
+        public Category Category { get; set; }
+
         public ICollection<BookObject> Books { get; set; } = new List<BookObject>();
     }
 }

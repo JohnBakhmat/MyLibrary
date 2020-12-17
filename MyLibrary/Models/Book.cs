@@ -20,7 +20,7 @@ namespace MyLibrary.Models {
 
         public int Ration { get; set; } = 0;
 
-        public int Cost { get; set; } = 0;
+        public double Cost { get; set; } = 0;
         
         public int Count { get; set; }
         

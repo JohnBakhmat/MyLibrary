@@ -19,10 +19,11 @@ namespace MyLibrary.Data {
         public DbSet<BookAuthor> BookAuthors { get; set; }
         public DbSet<BookUser> BookUsers { get; set; }
         public DbSet<BookCategory> BookCategories { get; set; }
+        public DbSet<BookCollection> BookCollections { get; set; }
         
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
-
+            
             builder.Entity<BookAuthor>().HasKey(t => new {t.AuthorId, t.BookId});
             builder.Entity<BookCategory>().HasKey(t => new {t.CategoryId, t.BookId});
             builder.Entity<BookUser>().HasKey(t => new {t.UserId, t.BookId});

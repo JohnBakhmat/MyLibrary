@@ -9,8 +9,8 @@ using MyLibrary.Data;
 namespace MyLibrary.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201127104312_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20201217133613_Collections")]
+    partial class Collections
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -246,8 +246,8 @@ namespace MyLibrary.Migrations
                     b.Property<int>("BookType")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Cost")
-                        .HasColumnType("INTEGER");
+                    b.Property<double>("Cost")
+                        .HasColumnType("REAL");
 
                     b.Property<int>("Count")
                         .HasColumnType("INTEGER");
@@ -309,6 +309,85 @@ namespace MyLibrary.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("BookCategories");
+                });
+
+            modelBuilder.Entity("MyLibrary.Models.BookCollection", b =>
+                {
+                    b.Property<int>("BookCollectionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AlgebraId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BiologyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ChemistryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EnglishId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("GeometryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("InformaticsId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("LiteratureId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MusicId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("RussianId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UkraineHistoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UkrainianId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("WorldHistoryId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("BookCollectionId");
+
+                    b.HasIndex("AlgebraId");
+
+                    b.HasIndex("BiologyId");
+
+                    b.HasIndex("ChemistryId");
+
+                    b.HasIndex("EnglishId");
+
+                    b.HasIndex("GeometryId");
+
+                    b.HasIndex("InformaticsId");
+
+                    b.HasIndex("LiteratureId");
+
+                    b.HasIndex("MusicId");
+
+                    b.HasIndex("RussianId");
+
+                    b.HasIndex("UkraineHistoryId");
+
+                    b.HasIndex("UkrainianId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("WorldHistoryId");
+
+                    b.ToTable("BookCollections");
                 });
 
             modelBuilder.Entity("MyLibrary.Models.BookObject", b =>
@@ -382,10 +461,18 @@ namespace MyLibrary.Migrations
                     b.Property<string>("BookcaseDescription")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("BooksCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ShelfCode")
                         .HasColumnType("TEXT");
 
                     b.HasKey("ShelfId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Shelves");
                 });
@@ -500,6 +587,87 @@ namespace MyLibrary.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MyLibrary.Models.BookCollection", b =>
+                {
+                    b.HasOne("MyLibrary.Models.BookObject", "Algebra")
+                        .WithMany()
+                        .HasForeignKey("AlgebraId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "Biology")
+                        .WithMany()
+                        .HasForeignKey("BiologyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "Chemistry")
+                        .WithMany()
+                        .HasForeignKey("ChemistryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "English")
+                        .WithMany()
+                        .HasForeignKey("EnglishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "Geometry")
+                        .WithMany()
+                        .HasForeignKey("GeometryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "Informatics")
+                        .WithMany()
+                        .HasForeignKey("InformaticsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "Literature")
+                        .WithMany()
+                        .HasForeignKey("LiteratureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "Music")
+                        .WithMany()
+                        .HasForeignKey("MusicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "Russian")
+                        .WithMany()
+                        .HasForeignKey("RussianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "UkraineHistory")
+                        .WithMany()
+                        .HasForeignKey("UkraineHistoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "Ukrainian")
+                        .WithMany()
+                        .HasForeignKey("UkrainianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyLibrary.Models.BookObject", "WorldHistory")
+                        .WithMany()
+                        .HasForeignKey("WorldHistoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MyLibrary.Models.BookObject", b =>
                 {
                     b.HasOne("MyLibrary.Models.Book", "BookInfo")
@@ -522,6 +690,15 @@ namespace MyLibrary.Migrations
                     b.HasOne("MyLibrary.Models.User", "User")
                         .WithMany("BookLog")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MyLibrary.Models.Shelf", b =>
+                {
+                    b.HasOne("MyLibrary.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
