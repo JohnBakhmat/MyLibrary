@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using MyLibrary.Data;
 using MyLibrary.Models;
 using MyLibrary.Models.ViewModels;
@@ -16,11 +18,11 @@ namespace MyLibrary.Controllers {
         public BookController(ApplicationDbContext context) {
             _context = context;
         }
-        
+
         // GET: Book
         public IActionResult Index(string searchString = "", string sortBy = "name") {
             var content = _context.Books
-                .GroupJoin(_context.BookAuthors, b => b.BookId, ab => ab.BookId, 
+                .GroupJoin(_context.BookAuthors, b => b.BookId, ab => ab.BookId,
                     (b, gj) => new {b, gj}).SelectMany(
                     t => t.gj.DefaultIfEmpty(),
                     (t, ab) => new BookAuthorViewModel {
@@ -30,7 +32,7 @@ namespace MyLibrary.Controllers {
                         Cost = t.b.Cost,
                         Language = t.b.Language,
                         Publisher = t.b.Publisher,
-                        Author = ab.Author!=null? $"{ab.Author.LastName} {ab.Author.FirstName.First()};":" ",
+                        Author = ab.Author != null ? $"{ab.Author.LastName} {ab.Author.FirstName.First()};" : " ",
                         BookId = t.b.BookId,
                         Image = t.b.Image,
                         Rating = t.b.Ration
@@ -82,7 +84,8 @@ namespace MyLibrary.Controllers {
         public IActionResult Details(int? id) {
             if (id == null) return NotFound();
             var content = _context.Books
-                .GroupJoin(_context.BookAuthors, b => b.BookId, ab => ab.BookId, (b, gj) => new {b, gj}).SelectMany(
+                .GroupJoin(_context.BookAuthors, b => b.BookId, ab => ab.BookId,
+                    (b, gj) => new {b, gj}).SelectMany(
                     t => t.gj.DefaultIfEmpty(),
                     (t, ab) => new BookAuthorViewModel {
                         BookType = t.b.BookType,
@@ -91,7 +94,7 @@ namespace MyLibrary.Controllers {
                         Cost = t.b.Cost,
                         Language = t.b.Language,
                         Publisher = t.b.Publisher,
-                        Author = $"{ab.Author.LastName} {ab.Author.FirstName.First()};",
+                        Author = ab.Author != null ? $"{ab.Author.LastName} {ab.Author.FirstName.First()};" : " ",
                         BookId = t.b.BookId,
                         Image = t.b.Image,
                         Rating = t.b.Ration
@@ -119,7 +122,6 @@ namespace MyLibrary.Controllers {
                 Author = string.Join("\n", grp.Select(ee => ee.Author).OrderBy(a => a.First()).ToList())
             });
             var book = c2.FirstOrDefault(m => m.BookId == id);
-            if (book == null) return NotFound();
             return View(book);
         }
 
@@ -139,12 +141,7 @@ namespace MyLibrary.Controllers {
             if (!ModelState.IsValid) return View(book);
             for (var i = 0; i < book.Count; i++) {
                 var bo = new BookObject();
-                var code = 1;
-                if (_context.BookObjects.Max(b => b.BookCode) != null) {
-                    code = 1 + int.Parse(_context.BookObjects.Max(b => b.BookCode)) + i;
-                }
                 bo.BookInfo = book;
-                bo.BookCode = code.ToString();
                 _context.Add(bo);
             }
 
@@ -189,22 +186,45 @@ namespace MyLibrary.Controllers {
         // GET: Book/Delete/5
         public async Task<IActionResult> Delete(int? id) {
             if (id == null) return NotFound();
-            var content = from b in _context.Books
-                join ab in _context.BookAuthors on b.BookId equals ab.BookId into gj
-                from ab in gj.DefaultIfEmpty()
-                select new BookAuthorViewModel {
-                    BookType = b.BookType,
-                    Name = b.Name,
-                    ISBN = b.ISBN,
-                    Cost = b.Cost,
-                    Language = b.Language,
-                    Publisher = b.Publisher,
-                    Author = ab.Author.LastName,
-                    BookId = b.BookId,
-                    Image = b.Image,
-                    Rating = b.Ration
-                };
-            var book = await content.FirstOrDefaultAsync(m => m.BookId == id);
+            var content = _context.Books
+                .GroupJoin(_context.BookAuthors, b => b.BookId, ab => ab.BookId,
+                    (b, gj) => new {b, gj}).SelectMany(
+                    t => t.gj.DefaultIfEmpty(),
+                    (t, ab) => new BookAuthorViewModel {
+                        BookType = t.b.BookType,
+                        Name = t.b.Name,
+                        ISBN = t.b.ISBN,
+                        Cost = t.b.Cost,
+                        Language = t.b.Language,
+                        Publisher = t.b.Publisher,
+                        Author = ab.Author != null ? $"{ab.Author.LastName} {ab.Author.FirstName.First()};" : " ",
+                        BookId = t.b.BookId,
+                        Image = t.b.Image,
+                        Rating = t.b.Ration
+                    });
+            var c2 = content.AsEnumerable().GroupBy(item => new {
+                item.BookId,
+                item.BookType,
+                item.Name,
+                item.ISBN,
+                item.Publisher,
+                item.Cost,
+                item.Language,
+                item.Image,
+                item.Rating
+            }).Select(grp => new BookAuthorViewModel {
+                BookId = grp.Key.BookId,
+                BookType = grp.Key.BookType,
+                Name = grp.Key.Name,
+                ISBN = grp.Key.ISBN,
+                Publisher = grp.Key.Publisher,
+                Cost = grp.Key.Cost,
+                Language = grp.Key.Language,
+                Image = grp.Key.Image,
+                Rating = grp.Key.Rating,
+                Author = string.Join("\n", grp.Select(ee => ee.Author).OrderBy(a => a.First()).ToList())
+            });
+            var book = c2.FirstOrDefault(m => m.BookId == id);
             if (book == null) return NotFound();
             return View(book);
         }
@@ -226,6 +246,42 @@ namespace MyLibrary.Controllers {
 
         private bool BookExists(int id) {
             return _context.Books.Any(e => e.BookId == id);
+        }
+
+        public async void WhereToSet(Book book) {
+            var bookObjects = await _context.BookObjects.Where(o => o.BookInfo.Equals(book)).ToListAsync();
+            var content = _context.Books
+                .GroupJoin(_context.BookCategories, b => b.BookId, ab => ab.BookId, (b, gj) => new {b, gj}).SelectMany(
+                    t => t.gj.DefaultIfEmpty(),
+                    (t, ab) => new BookCategoryViewModel {
+                        BookId = t.b.BookId,
+                        Categories = ab.Category.Lable.ToString()
+                    });
+            var contentGrouped = content.AsEnumerable()
+                .GroupBy(item => new {
+                    item.BookId,
+                    item.Categories
+                }).Select(grp => new BookCategoryViewModel {
+                    BookId = grp.Key.BookId,
+                    Categories = string.Join("\n", grp.Select(ee => ee.Categories).OrderBy(a => a.First()).ToList())
+                }).FirstOrDefault(model => model.BookId.Equals(book.BookId));
+            if (contentGrouped == null) return;
+            var category = contentGrouped.Categories;
+            var shelves = await _context.Shelves.Where(shelf => category.Contains(shelf.Category.Lable.ToString()))
+                .ToListAsync();
+            foreach (var bookObject in bookObjects) {
+                var current = shelves.First();
+                if (current.BooksCount < 24) {
+                    current.Books.Add(bookObject);
+                    bookObject.Shelf = current;
+                }
+                else {
+                    shelves.Remove(current);
+                }
+            }
+
+            _context.BookObjects.UpdateRange(bookObjects);
+            _context.Shelves.UpdateRange(shelves);
         }
 
         public FileContentResult Inventory() {
@@ -278,6 +334,5 @@ namespace MyLibrary.Controllers {
                 return null;
             }
         }
-
     }
 }

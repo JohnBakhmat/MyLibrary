@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 using MyLibrary.Models;
 
 namespace MyLibrary.Data {
@@ -20,14 +18,14 @@ namespace MyLibrary.Data {
         public DbSet<BookUser> BookUsers { get; set; }
         public DbSet<BookCategory> BookCategories { get; set; }
         public DbSet<BookCollection> BookCollections { get; set; }
-        
+
         protected override void OnModelCreating(ModelBuilder builder) {
             base.OnModelCreating(builder);
-            
+
             builder.Entity<BookAuthor>().HasKey(t => new {t.AuthorId, t.BookId});
             builder.Entity<BookCategory>().HasKey(t => new {t.CategoryId, t.BookId});
             builder.Entity<BookUser>().HasKey(t => new {t.UserId, t.BookId});
-            
+
             builder.Entity<BookCategory>()
                 .HasOne(sc => sc.Book)
                 .WithMany(s => s.Categories)
@@ -49,7 +47,7 @@ namespace MyLibrary.Data {
             builder.Entity<BookObject>()
                 .HasOne(bo => bo.BookInfo)
                 .WithMany(b => b.BookObjects);
-            
+
             // Authors
             builder.Entity<BookAuthor>()
                 .HasOne(sc => sc.Book)

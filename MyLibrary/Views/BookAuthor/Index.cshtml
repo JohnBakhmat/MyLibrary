@@ -1,4 +1,4 @@
-@model IEnumerable<MyLibrary.Models.BookAuthor>
+@model IEnumerable<BookAuthor>
 
 @{
     Layout = "_Layout";
@@ -8,7 +8,7 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width"/>
     <title>Index</title>
 </head>
 <body>
@@ -34,7 +34,7 @@
     </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.OrderByDescending(i => i.Author.LastName).ThenBy(i => i.Book.Name)) {
+    @foreach (var item in Model.OrderByDescending(i => i.Author.LastName).ThenBy(i => i.Book.Name)) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.BookAuthorId)
@@ -54,7 +54,7 @@
                 <a asp-action="Delete" asp-route-id="@item.BookAuthorId">Delete</a>
             </td>
         </tr>
-}
+    }
     </tbody>
 </table>
 </body>

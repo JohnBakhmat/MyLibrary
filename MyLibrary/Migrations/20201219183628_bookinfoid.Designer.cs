@@ -9,8 +9,8 @@ using MyLibrary.Data;
 namespace MyLibrary.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201217133613_Collections")]
-    partial class Collections
+    [Migration("20201219183628_bookinfoid")]
+    partial class bookinfoid
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -399,7 +399,7 @@ namespace MyLibrary.Migrations
                     b.Property<string>("BookCode")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("BookInfoBookId")
+                    b.Property<int>("BookInfoId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("ShelfId")
@@ -407,7 +407,7 @@ namespace MyLibrary.Migrations
 
                     b.HasKey("BookObjectId");
 
-                    b.HasIndex("BookInfoBookId");
+                    b.HasIndex("BookInfoId");
 
                     b.HasIndex("ShelfId");
 
@@ -422,7 +422,13 @@ namespace MyLibrary.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Id")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsReturned")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("UserId", "BookId");
@@ -672,7 +678,9 @@ namespace MyLibrary.Migrations
                 {
                     b.HasOne("MyLibrary.Models.Book", "BookInfo")
                         .WithMany("BookObjects")
-                        .HasForeignKey("BookInfoBookId");
+                        .HasForeignKey("BookInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MyLibrary.Models.Shelf", "Shelf")
                         .WithMany("Books")

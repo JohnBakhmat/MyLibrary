@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyLibrary.Models {
     public class BookCollection {
-        [Key]
-        public int BookCollectionId { get; set; }
+        [Key] public int BookCollectionId { get; set; }
+
         public DateTime Date { get; set; }
-        
+
         public User User { get; set; }
         public int UserId { get; set; }
 
@@ -31,19 +30,19 @@ namespace MyLibrary.Models {
 
         public BookObject WorldHistory { get; set; }
         public int WorldHistoryId { get; set; }
-        
+
         public BookObject Chemistry { get; set; }
         public int ChemistryId { get; set; }
-        
+
         public BookObject Biology { get; set; }
         public int BiologyId { get; set; }
-        
+
         public BookObject Informatics { get; set; }
         public int InformaticsId { get; set; }
-        
+
         public BookObject Music { get; set; }
         public int MusicId { get; set; }
-        
+
         public BookObject Literature { get; set; }
         public int LiteratureId { get; set; }
     }

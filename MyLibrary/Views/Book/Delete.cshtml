@@ -8,7 +8,7 @@
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width"/>
     <title>Delete</title>
 </head>
 <body>
@@ -17,63 +17,63 @@
 <div>
     <div>
         <div class="row col-12">
-            <img class="img-fluid shadow-lg" width="300px" height="400px" src="@Model.Image" alt="Ошибка: Изображение не найдено!"/>
-            <dl class="col-sm-8">
-                <dt class="col-sm-2">
-                    Название:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Name)
-                </dd>
-                <dt class="col-sm-2">
-                    Автор:
-                </dt>
-                <dd class="col-sm-10">
-                    @* @Html.DisplayFor(model => model.Author) *@
-                </dd>
-                <dt class="col-sm-2">
-                    ISBN-10:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.ISBN)
-                </dd>
-                <dt class="col-sm-2">
-                    Издатель:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Publisher)
-                </dd>
-                <dt class="col-sm-2">
-                    Тип:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.BookType)
-                </dd>
-                <dt class="col-sm-2">
-                    Язык:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Language)
-                </dd>
-                <dt class="col-sm-2">
-                    Популярность:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Rating)
-                </dd>
-                <dt class="col-sm-2">
-                    Цена:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Cost) &#8372;
-                </dd>
-            </dl>
-        </div>
+                <img class="img-fluid shadow-lg" width="300px" height="400px" src="@Model.Image" alt="Ошибка: Изображение не найдено!"/>
+                <dl class="col-sm-8">
+                    <dt class="col-sm-2">
+                        Название:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Автор:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Author)
+                    </dd>
+                    <dt class="col-sm-2">
+                        ISBN-10:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.ISBN)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Издатель:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Publisher)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Тип:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.BookType)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Язык:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Language)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Популярность:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Rating)
+                    </dd>
+                    <dt class="col-sm-2">
+                        Цена:
+                    </dt>
+                    <dd class="col-sm-10">
+                        @Html.DisplayFor(model => model.Cost) &#8372;
+                    </dd>
+                </dl>
+            </div>
     </div>
     <br>
     <form asp-action="Delete">
-        <input type="hidden" asp-for="BookId" />
-        <input type="submit" value="Удалить" class="btn btn-danger" />
+        <input type="hidden" asp-for="BookId"/>
+        <input type="submit" value="Удалить" class="btn btn-danger"/>
         <a asp-action="Index" class="btn btn-primary">Вернуться</a>
     </form>
 </div>

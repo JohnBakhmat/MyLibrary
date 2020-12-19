@@ -1,4 +1,3 @@
-@using Microsoft.AspNetCore.Identity
 @model IEnumerable<MyLibrary.Models.ViewModels.BookObjectViewModel>
 @{
     ViewData["Title"] = "Home Page";
@@ -30,6 +29,9 @@
             Код книги
         </th>
         <th>
+            Дата
+        </th>
+        <th>
             Последний пользователь
         </th>
         <th></th>
@@ -46,7 +48,15 @@
                 @Html.DisplayFor(modelItem => item.BookNumber)
             </td>
             <td>
-                <a asp-controller="User" asp-action="Details" asp-route-id="@item.LastUsersId"></a>
+                @Html.DisplayFor(modelItem => item.DateTime)
+            </td>
+            <td>
+                @if (item.User.TrimStart().TrimEnd().Length > 0) {
+                    <a asp-controller="User" asp-action="Details" asp-route-id="@item.UserId">@item.User</a>
+                }
+                else {
+                    <a asp-controller="BookUser" asp-action="Create2" asp-route-bookCode="@item.BookNumber">Записать</a>
+                }
             </td>
             @*<td>
                 <a asp-action="Details" asp-route-id="@item.BookId" class="btn btn-info col-12">Выбрать</a><br>

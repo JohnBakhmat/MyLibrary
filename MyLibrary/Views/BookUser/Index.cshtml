@@ -1,61 +1,64 @@
-@model IEnumerable<MyLibrary.Models.BookUser>
-
+@model IEnumerable<MyLibrary.Models.ViewModels.BookObjectViewModel>
 @{
+    ViewData["Title"] = "Home Page";
     Layout = "_Layout";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+@if (User.Identity.IsAuthenticated) {
+    <p>
+        <a asp-action="Create" class="btn btn-success">Добавить издание</a>
+    </p>
+}
+@using (Html.BeginForm())
+{
+    <p class="container row">
+        <input type="search" class="form-control col-6 m-2 p-1" name="SearchString" placeholder="Искать издание..." style="font-family: Menlo,serif">
+        <button type="submit" class="btn btn-success form-control col-auto m-2" style="width: 50px">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+                <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+            </svg></button>
+    </p>
+}
+<table class="table col-auto">
     <thead>
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Book.BookInfo.Name)
+            Название
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Book.BookCode)
+            Код книги
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User.FirstName)
+            Дата
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.User.LastName)
+            Последний пользователь
         </th>
         <th></th>
+
     </tr>
     </thead>
     <tbody>
     @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Book.BookInfo.Name)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Book.BookCode)
+                @Html.DisplayFor(modelItem => item.BookNumber)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.FirstName)
+                @Html.DisplayFor(modelItem => item.DateTime)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.LastName)
+                <a asp-controller="User" asp-action="Details" asp-route-id="@item.UserId">@item.User</a>
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
+            @*<td>
+                <a asp-action="Details" asp-route-id="@item.BookId" class="btn btn-info col-12">Выбрать</a><br>
+                <a asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-primary col-12">Изменить</a><br>
+                <a asp-action="Delete" asp-route-id="@item.BookId" class="btn btn-danger col-12">Удалить</a>
+            </td>*@
         </tr>
     }
     </tbody>
 </table>
-</body>
-</html>
