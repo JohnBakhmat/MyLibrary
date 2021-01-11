@@ -16,7 +16,7 @@
 </head>
 <body>
 
-<h4>BookAuthor</h4>
+<h4>Записать издание</h4>
 <hr/>
 <div class="row">
     <div class="col-md-4">
@@ -24,14 +24,14 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="BookId" class="control-label"></label>
+                <label asp-for="BookId" class="control-label">Код издания</label>
                 <select asp-for="BookId" class="form-control">
                     @foreach (var book in books) {
                         <option label="@book.BookCode" value="@book.BookObjectId"></option>                    }
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
+                <label asp-for="UserId" class="control-label">Пользователь</label>
                 <select asp-for="UserId" class="form-control">
                     @foreach (var user in users) {
                         <option label="@user.FirstName @user.LastName" value="@user.UserId"></option>                    }
@@ -45,7 +45,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-info" asp-action="Index">Back to List</a>
 </div>
 
 </body>

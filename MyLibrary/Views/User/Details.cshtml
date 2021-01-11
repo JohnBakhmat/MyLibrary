@@ -14,41 +14,41 @@
 <body>
 
 <div>
-    <h4>User</h4>
+    <h4>Пользователь</h4>
     <hr/>
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
+            Имя
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FirstName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
+            Фамилия
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.LastName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FathersName)
+            Отчество
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FathersName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Age)
+            Возраст
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Age)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Class)
+            Класс
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Class)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Rating)
+            Рейтинг
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Rating)
@@ -56,8 +56,8 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.UserId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.UserId">Edit</a> |
+    <a class="btn  btn-info" asp-action="Index">Back to List</a>
 </div>
 </body>
 </html>

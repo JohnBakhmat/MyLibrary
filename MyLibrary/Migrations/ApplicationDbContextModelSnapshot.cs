@@ -400,7 +400,7 @@ namespace MyLibrary.Migrations
                     b.Property<int>("BookInfoId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ShelfId")
+                    b.Property<int>("ShelfId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("BookObjectId");
@@ -682,7 +682,9 @@ namespace MyLibrary.Migrations
 
                     b.HasOne("MyLibrary.Models.Shelf", "Shelf")
                         .WithMany("Books")
-                        .HasForeignKey("ShelfId");
+                        .HasForeignKey("ShelfId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyLibrary.Models.BookUser", b =>

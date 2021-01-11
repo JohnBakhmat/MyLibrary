@@ -37,7 +37,7 @@ namespace MyLibrary.Controllers {
                         Image = t.b.Image,
                         Rating = t.b.Ration
                     });
-            var c2 = content.AsEnumerable().GroupBy(item => new {
+            var contentV2 = content.AsEnumerable().GroupBy(item => new {
                 item.BookId,
                 item.BookType,
                 item.Name,
@@ -61,23 +61,23 @@ namespace MyLibrary.Controllers {
             });
             if (!string.IsNullOrEmpty(searchString)) {
                 var sS = searchString.Split(' ');
-                c2 = sS.Aggregate(c2,
+                contentV2 = sS.Aggregate(contentV2,
                     (current, parameter) => current.Where(b =>
                         b.Author.Contains(parameter) || b.Name.Contains(parameter) || b.ISBN.Contains(parameter) ||
                         b.Publisher.Contains(parameter) || b.Language.Contains(parameter)));
             }
 
-            c2 = sortBy switch {
-                "name" => c2.OrderBy(b => b.Name).ThenBy(b => b.Author),
-                "author" => c2.OrderBy(b => b.Author).ThenBy(b => b.Name),
-                "lang" => c2.OrderBy(b => b.Language),
-                "isbn" => c2.OrderBy(b => b.ISBN),
-                "publisher" => c2.OrderBy(b => b.Publisher),
-                "type" => c2.OrderBy(b => b.BookType),
-                "rating" => c2.OrderBy(b => b.Rating),
-                _ => c2
+            contentV2 = sortBy switch {
+                "name" => contentV2.OrderBy(b => b.Name).ThenBy(b => b.Author),
+                "author" => contentV2.OrderBy(b => b.Author).ThenBy(b => b.Name),
+                "lang" => contentV2.OrderBy(b => b.Language),
+                "isbn" => contentV2.OrderBy(b => b.ISBN),
+                "publisher" => contentV2.OrderBy(b => b.Publisher),
+                "type" => contentV2.OrderBy(b => b.BookType),
+                "rating" => contentV2.OrderBy(b => b.Rating),
+                _ => contentV2
             };
-            return View(c2);
+            return View(contentV2);
         }
 
         // GET: Book/Details/5
@@ -88,26 +88,26 @@ namespace MyLibrary.Controllers {
                     (b, gj) => new {b, gj}).SelectMany(
                     t => t.gj.DefaultIfEmpty(),
                     (t, ab) => new BookAuthorViewModel {
-                        BookType = t.b.BookType,
-                        Name = t.b.Name,
-                        ISBN = t.b.ISBN,
-                        Cost = t.b.Cost,
-                        Language = t.b.Language,
-                        Publisher = t.b.Publisher,
                         Author = ab.Author != null ? $"{ab.Author.LastName} {ab.Author.FirstName.First()};" : " ",
                         BookId = t.b.BookId,
+                        BookType = t.b.BookType,
+                        Cost = t.b.Cost,
+                        ISBN = t.b.ISBN,
                         Image = t.b.Image,
+                        Language = t.b.Language,
+                        Name = t.b.Name,
+                        Publisher = t.b.Publisher,
                         Rating = t.b.Ration
                     });
             var c2 = content.AsEnumerable().GroupBy(item => new {
                 item.BookId,
                 item.BookType,
-                item.Name,
-                item.ISBN,
-                item.Publisher,
                 item.Cost,
-                item.Language,
+                item.ISBN,
                 item.Image,
+                item.Language,
+                item.Name,
+                item.Publisher,
                 item.Rating
             }).Select(grp => new BookAuthorViewModel {
                 BookId = grp.Key.BookId,
@@ -124,7 +124,6 @@ namespace MyLibrary.Controllers {
             var book = c2.FirstOrDefault(m => m.BookId == id);
             return View(book);
         }
-
         // GET: Book/Create
         public IActionResult Create() {
             return View();
@@ -139,8 +138,11 @@ namespace MyLibrary.Controllers {
             [Bind("BookId,Name,ISBN,Publisher,BookType,Language,Ration,Cost,Image,Count")]
             Book book) {
             if (!ModelState.IsValid) return View(book);
+            var code = int.Parse(_context.BookObjects.Select(bo => bo.BookCode).Last());
             for (var i = 0; i < book.Count; i++) {
+                code++;
                 var bo = new BookObject();
+                bo.BookCode = $"{code}";
                 bo.BookInfo = book;
                 _context.Add(bo);
             }
@@ -248,40 +250,37 @@ namespace MyLibrary.Controllers {
             return _context.Books.Any(e => e.BookId == id);
         }
 
-        public async void WhereToSet(Book book) {
-            var bookObjects = await _context.BookObjects.Where(o => o.BookInfo.Equals(book)).ToListAsync();
-            var content = _context.Books
-                .GroupJoin(_context.BookCategories, b => b.BookId, ab => ab.BookId, (b, gj) => new {b, gj}).SelectMany(
-                    t => t.gj.DefaultIfEmpty(),
-                    (t, ab) => new BookCategoryViewModel {
-                        BookId = t.b.BookId,
-                        Categories = ab.Category.Lable.ToString()
-                    });
-            var contentGrouped = content.AsEnumerable()
-                .GroupBy(item => new {
-                    item.BookId,
-                    item.Categories
-                }).Select(grp => new BookCategoryViewModel {
-                    BookId = grp.Key.BookId,
-                    Categories = string.Join("\n", grp.Select(ee => ee.Categories).OrderBy(a => a.First()).ToList())
-                }).FirstOrDefault(model => model.BookId.Equals(book.BookId));
-            if (contentGrouped == null) return;
-            var category = contentGrouped.Categories;
-            var shelves = await _context.Shelves.Where(shelf => category.Contains(shelf.Category.Lable.ToString()))
+        public async void Automatisation() {
+            WhereToSet();
+            RedirectToAction("Index", "Shelf");
+        }
+        //Automatisation
+        public async void WhereToSet() {
+            var books = await _context.Books.ToListAsync();
+            foreach (var book in books) {
+                var bookObjects = await _context.BookObjects.Where(bo=>bo.ShelfId==0).ToListAsync();
+                if (bookObjects.Count == 0) continue;
+                var category = await _context.BookCategories.FirstOrDefaultAsync(c => c.BookId == book.BookId);
+                if (category == null) continue;
+                var shelves = await _context.Shelves
+                .Where(s => s.CategoryId == category.CategoryId)
                 .ToListAsync();
-            foreach (var bookObject in bookObjects) {
-                var current = shelves.First();
-                if (current.BooksCount < 24) {
-                    current.Books.Add(bookObject);
-                    bookObject.Shelf = current;
-                }
-                else {
-                    shelves.Remove(current);
+                foreach (var bookObject in bookObjects) {
+                    if(shelves.Count==0) break;
+                    var current = shelves.First();
+                    if (current.BooksCount < 24) {
+                        current.BooksCount++;
+                        bookObject.Shelf = current;
+                        _context.Shelves.Update(current);
+                        _context.BookObjects.Update(bookObject);
+                    }
+                    else {
+                        shelves.Remove(current);
+                    }
                 }
             }
-
-            _context.BookObjects.UpdateRange(bookObjects);
-            _context.Shelves.UpdateRange(shelves);
+            await _context.SaveChangesAsync();
+            return;
         }
 
         public FileContentResult Inventory() {
@@ -298,7 +297,8 @@ namespace MyLibrary.Controllers {
                         Author = $"{ab.Author.LastName} {ab.Author.FirstName};",
                         BookId = t.b.BookId,
                         Image = t.b.Image,
-                        Rating = t.b.Ration
+                        Rating = t.b.Ration,
+                        BookCount = t.b.Count
                     });
             var contentGrouped = content.AsEnumerable()
                 .GroupBy(item => new {
@@ -310,7 +310,8 @@ namespace MyLibrary.Controllers {
                     item.Cost,
                     item.Language,
                     item.Image,
-                    item.Rating
+                    item.Rating,
+                    item.BookCount
                 }).Select(grp => new BookAuthorViewModel {
                     BookId = grp.Key.BookId,
                     BookType = grp.Key.BookType,
@@ -321,14 +322,19 @@ namespace MyLibrary.Controllers {
                     Language = grp.Key.Language,
                     Image = grp.Key.Image,
                     Rating = grp.Key.Rating,
+                    BookCount = grp.Key.BookCount,
                     Author = string.Join("\n", grp.Select(ee => ee.Author).OrderBy(a => a.First()).ToList())
                 });
             try {
-                var buffer = "Название\tАвтор\tТип\tИздатель\tISBN\tЯзык\tРейтинг\tЦена";
-                foreach (var b in contentGrouped)
-                    buffer +=
-                        $"\n{b.Name}\t{b.Author.Replace(";\n", ",")}\t{b.BookType}\t{b.Publisher}\t{b.ISBN}\t{b.Language}\t{b.Rating}\t{b.Cost}";
-                return File(Encoding.UTF8.GetBytes(buffer), "text/csv", "books.csv");
+                var buffer = "Название\tАвтор\tТип\tИздатель\tISBN\tЯзык\tРейтинг\tЦена\tКолличество";
+                var count = 0;
+                foreach (var b in contentGrouped) {
+                    count += b.BookCount;
+                    buffer += $"\n{b.Name}\t{b.Author.Replace(";\n", ",")}\t{b.BookType}\t{b.Publisher}\t{b.ISBN}\t{b.Language}\t{b.Rating}\t{b.Cost}\t{b.BookCount}";
+                }
+
+                buffer += $"\n\t\t\t\t\t\t\tВсего изданий:\t{count}";
+                return File(Encoding.UTF8.GetBytes(buffer), "text/csv", $"Books || {DateTime.Now:dddd, dd MMM yyyy}.csv");
             }
             catch {
                 return null;

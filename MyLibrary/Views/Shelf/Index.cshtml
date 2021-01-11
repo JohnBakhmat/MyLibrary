@@ -1,0 +1,59 @@
+@model IEnumerable<MyLibrary.Models.ViewModels.ShelfBookObjectViewModel>
+
+@{
+    ViewBag.Title = "Задача автоматизации";
+    Layout = "_Layout";
+}
+<table class="table col-auto">
+    <thead>
+    <tr>
+        <th>
+            ShelfId
+        </th>
+        <th>
+            ShelfCode
+        </th>
+        <th>
+            Category
+        </th>
+        <th>
+            BookcaseDescription
+        </th>
+        <th>
+            BooksCount
+        </th>
+        <th>
+            BookObjects
+        </th>
+        <th>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShelfId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShelfCode)
+            </td>
+            <td>@Html.DisplayFor(modelitem => item.Category.Lable)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookcaseDescription)
+            </td>
+            <td>
+                <p>@item.BookObjects.Split('\n').Length : 24</p>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookObjects)
+            </td>
+            @*<td>
+                <a asp-action="Details" asp-route-id="@item.BookId" class="btn btn-info col-12">Выбрать</a><br>
+                <a asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-primary col-12">Изменить</a><br>
+                <a asp-action="Delete" asp-route-id="@item.BookId" class="btn btn-danger col-12">Удалить</a>
+            </td>*@
+        </tr>
+    }
+    </tbody>
+</table>

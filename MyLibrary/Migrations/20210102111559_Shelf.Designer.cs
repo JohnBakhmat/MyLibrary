@@ -9,8 +9,8 @@ using MyLibrary.Data;
 namespace MyLibrary.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201219183628_bookinfoid")]
-    partial class bookinfoid
+    [Migration("20210102111559_Shelf")]
+    partial class Shelf
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -402,7 +402,7 @@ namespace MyLibrary.Migrations
                     b.Property<int>("BookInfoId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ShelfId")
+                    b.Property<int>("ShelfId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("BookObjectId");
@@ -684,7 +684,9 @@ namespace MyLibrary.Migrations
 
                     b.HasOne("MyLibrary.Models.Shelf", "Shelf")
                         .WithMany("Books")
-                        .HasForeignKey("ShelfId");
+                        .HasForeignKey("ShelfId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyLibrary.Models.BookUser", b =>

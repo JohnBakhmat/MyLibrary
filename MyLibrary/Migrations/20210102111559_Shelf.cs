@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyLibrary.Migrations
 {
-    public partial class bookinfoid : Migration
+    public partial class Shelf : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -301,7 +301,7 @@ namespace MyLibrary.Migrations
                     BookObjectId = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     BookInfoId = table.Column<int>(nullable: false),
-                    ShelfId = table.Column<int>(nullable: true),
+                    ShelfId = table.Column<int>(nullable: false),
                     BookCode = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -318,7 +318,7 @@ namespace MyLibrary.Migrations
                         column: x => x.ShelfId,
                         principalTable: "Shelves",
                         principalColumn: "ShelfId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

@@ -117,13 +117,16 @@ namespace MyLibrary.Controllers {
         }
 
         public async Task<FileContentResult> Inventory() {
-            var content = await _context.Users.ToListAsync();
+            var content = await _context.Users.OrderByDescending(u=>u.Rating).ToListAsync();
             try {
-                var buffer = "FirstName,FathersName,LastName,Age,Class,Rating";
-                foreach (var user in content)
-                    buffer +=
-                        $"\n{user.FirstName},{user.FathersName},{user.LastName},{user.Age},{user.Class},{user.Rating}";
-                return File(Encoding.UTF8.GetBytes(buffer), "text/csv", "users.csv");
+                var buffer = "Имя,Фамилия,Отчество,Возраст,Класс,Рейтинг";
+                var count = 0;
+                foreach (var user in content) {
+                    count++; 
+                    buffer += $"\n{user.FirstName},{user.FathersName},{user.LastName},{user.Age},{user.Class},{user.Rating}"; 
+                }
+                buffer += $"\n,,,,Всего пользователей:,{count}";
+                return File(Encoding.UTF8.GetBytes(buffer), "text/csv", $"Users || {DateTime.Now:dddd, dd MMM yyyy}.csv");
             }
             catch {
                 return null;

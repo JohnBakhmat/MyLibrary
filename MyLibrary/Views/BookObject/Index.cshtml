@@ -55,7 +55,7 @@
                     <a asp-controller="User" asp-action="Details" asp-route-id="@item.UserId">@item.User</a>
                 }
                 else {
-                    <a asp-controller="BookUser" asp-action="Create2" asp-route-bookCode="@item.BookNumber">Записать</a>
+                    <a class="btn btn-outline-success" asp-controller="BookUser" asp-action="Create2" asp-route-bookCode="@item.BookNumber">Записать</a>
                 }
             </td>
             @*<td>

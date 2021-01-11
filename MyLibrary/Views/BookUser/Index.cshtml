@@ -53,11 +53,9 @@
             <td>
                 <a asp-controller="User" asp-action="Details" asp-route-id="@item.UserId">@item.User</a>
             </td>
-            @*<td>
-                <a asp-action="Details" asp-route-id="@item.BookId" class="btn btn-info col-12">Выбрать</a><br>
-                <a asp-action="Edit" asp-route-id="@item.BookId" class="btn btn-primary col-12">Изменить</a><br>
-                <a asp-action="Delete" asp-route-id="@item.BookId" class="btn btn-danger col-12">Удалить</a>
-            </td>*@
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.BookId" class="btn btn-danger col-12">Повернено</a>
+            </td>
         </tr>
     }
     </tbody>

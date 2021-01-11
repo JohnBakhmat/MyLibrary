@@ -18,10 +18,12 @@ namespace MyLibrary.Controllers {
         // GET
         public async Task<IActionResult> Index(int? id) {
             if (id == null) return NotFound();
-            /* SELECT Name,BookCode, LastName,FirstName from BookObjects 
-                JOIN Books B on B.BookId = BookObjects.BookInfoBookId
-                JOIN BookUsers BU on BookObjects.BookObjectId = BU.BookId
-                JOIN Users U on U.UserId = BU.UserId;*/
+             /*
+             SELECT Name,BookCode, LastName,FirstName from BookObjects 
+             JOIN Books B on B.BookId = BookObjects.BookInfoBookId
+             JOIN BookUsers BU on BookObjects.BookObjectId = BU.BookId
+             JOIN Users U on U.UserId = BU.UserId;
+             */
             var content = from bo in _context.BookObjects
                 join b in _context.Books on bo.BookInfo.BookId equals b.BookId
                 join bu in _context.BookUsers on bo.BookObjectId equals bu.BookId into bbu

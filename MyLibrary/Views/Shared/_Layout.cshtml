@@ -35,21 +35,24 @@
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Book" asp-action="Index">Издания</a>
                     </li>
-                    @if (User.Identity.IsAuthenticated) {
+                    
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Администрирование
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <ul class="navbar-nav flex-grow-1">
-                                    <li class="dropdown-item">
-                                        <a class="text-dark" asp-area="" asp-controller="BookAuthor" asp-action="Index">Связи</a>
-                                    </li>
                                     <li class="nav-item">
                                         <a class="dropdown-item text-dark" asp-area="" asp-controller="Author" asp-action="Index">Авторы</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="BookAuthor" asp-action="Index">Автор-Издание</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="dropdown-item text-dark" asp-area="" asp-controller="Category" asp-action="Index">Категории</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="BookCategory" asp-action="Index">Категория-Издание</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="dropdown-item text-dark" asp-area="" asp-controller="User" asp-action="Index">Пользователи</a>
@@ -57,10 +60,13 @@
                                     <li class="nav-item">
                                         <a class="dropdown-item text-dark" asp-area="" asp-controller="BookUser" asp-action="Index">Формуляр</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item text-dark" asp-area="" asp-controller="Shelf" asp-action="Index">Автоматизация</a>
+                                        </li>
                                 </ul>
                             </div>
                         </li>
-                    }
+                    
                 </ul>
             </div>
         </div>

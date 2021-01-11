@@ -1,7 +1,7 @@
 @model MyLibrary.Models.Category
 
 @{
-    Layout = null;
+    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
@@ -21,7 +21,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Lable" class="control-label"></label>
-                <select asp-for="Lable" class="form-control"></select>
+                <select asp-for="Lable" class="form-control" asp-items="Html.GetEnumSelectList<CategoryLable>()"></select>
                 <span asp-validation-for="Lable" class="text-danger"></span>
             </div>
             <div class="form-group">

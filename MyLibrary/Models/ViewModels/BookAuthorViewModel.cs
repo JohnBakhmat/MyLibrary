@@ -19,5 +19,7 @@ namespace MyLibrary.Models.ViewModels {
         public string Image { get; set; }
 
         public int Rating { get; set; }
+        
+        public int BookCount { get; set; }
     }
 }

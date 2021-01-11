@@ -24,14 +24,14 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="BookId" class="control-label"></label>
+                <label asp-for="BookId" class="control-label">Издание</label>
                 <select asp-for="BookId" class="form-control">
                     @foreach (var book in books) {
                         <option label="@book.Name" value="@book.BookId"></option>                    }
                 </select>
             </div>
             <div class="form-group">
-                <label asp-for="AuthorId" class="control-label"></label>
+                <label asp-for="AuthorId" class="control-label">Автор</label>
                 <select asp-for="AuthorId" class="form-control">
                     @foreach (var author in authors) {
                         <option label="@author.FirstName @author.LastName" value="@author.AuthorId"></option>                    }
